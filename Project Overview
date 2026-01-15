@@ -1,0 +1,24 @@
+E-Commerce Product Rating & Review Analysis
+Project Overview
+
+This project enhances e-commerce product evaluation by addressing outdated ratings and unreliable review rankings. Traditional averages misrepresent current product quality, and raw helpful votes can be misleading.
+
+Problem
+
+Simple average ratings give equal weight to old and new reviews (df["overall"].mean()), distorting current product quality.
+
+Review ranking by total votes favors popular but possibly biased reviews.
+
+Solution
+
+Implemented time-based weighted ratings (time_based_weighted_average()) to emphasize recent reviews.
+
+Engineered negative votes (helpful_no = total_vote - helpful_yes).
+
+Applied scoring metrics:
+
+Positive–negative vote difference (score_up_down_diff())
+
+Average helpfulness ratio (score_average_rating())
+
+Wilson Lower Bound (WLB) for statistically reliable ranking (wilson_lower_bound())

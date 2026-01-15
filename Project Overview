@@ -1,24 +1,9 @@
-E-Commerce Product Rating & Review Analysis
-Project Overview
+This project focuses on improving the reliability and accuracy of product ratings and review rankings in an e-commerce environment, where customer trust and purchase decisions are highly sensitive to user-generated feedback. The core motivation behind the project is that traditional rating and review systems often fail to reflect the true and current quality of a product, leading to misleading evaluations and poor user experience.
 
-This project enhances e-commerce product evaluation by addressing outdated ratings and unreliable review rankings. Traditional averages misrepresent current product quality, and raw helpful votes can be misleading.
+The first problem addressed is product rating calculation. In many platforms, product ratings are computed using a simple arithmetic mean of all historical ratings (df["overall"].mean()). However, this approach ignores the temporal dimension of user feedback. As a result, outdated reviews can dominate the rating and misrepresent the product’s current performance. To solve this, I implemented a time-based weighted average rating system (time_based_weighted_average()), where reviews are grouped based on recency using day_diff quantiles. More recent reviews are assigned higher weights (w1=50, w2=25, w3=15, w4=10), ensuring that the calculated rating better reflects current user sentiment and product quality.
 
-Problem
+The second major problem involves review ranking. Ranking reviews solely based on the total number of helpful votes (total_vote) introduces statistical bias and makes the system vulnerable to manipulation. Reviews with a small number of biased votes may rank disproportionately high, while statistically reliable reviews may be overlooked. To address this, I first engineered a missing signal by calculating negative votes (helpful_no = total_vote - helpful_yes). I then implemented multiple scoring mechanisms to evaluate reviews from different perspectives.
 
-Simple average ratings give equal weight to old and new reviews (df["overall"].mean()), distorting current product quality.
+These included the positive–negative vote difference (score_up_down_diff()), the average helpfulness ratio (score_average_rating()), and most importantly, the Wilson Lower Bound (WLB) score (wilson_lower_bound()), which accounts for both vote ratio and sample size under a defined confidence level. By ranking reviews using the Wilson Lower Bound (df.sort_values("wilson_lower_bound", ascending=False)), the system prioritizes statistically reliable reviews rather than merely popular ones.
 
-Review ranking by total votes favors popular but possibly biased reviews.
-
-Solution
-
-Implemented time-based weighted ratings (time_based_weighted_average()) to emphasize recent reviews.
-
-Engineered negative votes (helpful_no = total_vote - helpful_yes).
-
-Applied scoring metrics:
-
-Positive–negative vote difference (score_up_down_diff())
-
-Average helpfulness ratio (score_average_rating())
-
-Wilson Lower Bound (WLB) for statistically reliable ranking (wilson_lower_bound())
+As a result, the project delivers a fair, robust, and manipulation-resistant evaluation framework. Product ratings become more accurate and up-to-date, while review rankings surface the most trustworthy and informative feedback. This approach enhances customer confidence, improves decision-making on product detail pages, and supports sustainable growth for both sellers and the e-commerce platform.
